@@ -64,16 +64,24 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             setWebContentsDebuggingEnabled(true)    //웹에서 devtools 사용설정
+            clearCache(true)
             loadUrl("https://www.fab365.net/")  //웹뷰에 표시할 웹사이트 주소
         }
 
         val webSettings: WebSettings = webView.settings
         webSettings.apply {
             javaScriptEnabled = true    // 웹페이지 자바스크립트 허용 여부
-            useWideViewPort  = true // 화면 사이즈 맞추기 허용 여부
-            domStorageEnabled  = true  //데이터 저장 DOM 스토리지
-            setSupportZoom(false)   // 화면 줌 허용 여부
+            useWideViewPort = true // 화면 사이즈 맞추기 허용 여부
+            domStorageEnabled = true  //DOM 로컬 스토리지 사용여부
+            loadWithOverviewMode = true //컨텐츠가 웹뷰보다 클때 스크린 크기에 맞추기
+            allowContentAccess = true   //웹뷰를 통해 Content URL에 접근 할지 여부
+            allowFileAccess = true   //파일 액세스 허용 여부
+            blockNetworkImage = false   //네트워크를 통해 이미지리소스 받을지 여부
+            builtInZoomControls = true  // 줌 아이콘
             textZoom = 100  // system 글꼴 크기에 의해 변하는 것 방지
+            databaseEnabled = false   //database storage API 사용 여부
+            setSupportZoom(false)   // 화면 줌 허용 여부
+            setSupportMultipleWindows(true) //멀티윈도우를 지원할지 여부
             WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING   // 컨텐츠 사이즈 자동 맞추기
 
 //            userAgentString="${userAgent}/my_blues_app"   // 에이전트 값 셋팅
