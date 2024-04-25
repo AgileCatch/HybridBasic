@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                     printToast(errorMessage)
                     super.onReceivedError(view, request, error)
                     errorText.visibility = View.VISIBLE //on
-                    webView.visibility = View.GONE  //off
+//                    webView.visibility = View.VISIBLE  //off
                 }
             }
             setWebContentsDebuggingEnabled(true)    //웹에서 devtools 사용설정
