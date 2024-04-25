@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">HybridBasic</string>
+    <string name="error_text">접속이 원활하지 않습니다.</string>
+
+</resources>
