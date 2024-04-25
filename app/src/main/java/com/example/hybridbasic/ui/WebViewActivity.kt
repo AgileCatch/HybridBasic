@@ -1,9 +1,7 @@
-package com.example.hybridbasic
+package com.example.hybridbasic.ui
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
@@ -12,14 +10,10 @@ import android.webkit.WebView
 import android.webkit.WebView.setWebContentsDebuggingEnabled
 import android.webkit.WebViewClient
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.hybridbasic.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class WebViewActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
@@ -89,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    //나중에 유틸로 분리하기
     fun printToast(msg: String) {
         Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
 
