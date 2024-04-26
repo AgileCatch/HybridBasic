@@ -1,10 +1,10 @@
 package com.example.hybridbasic.ui
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
-import android.view.View
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
@@ -18,6 +18,7 @@ import com.example.hybridbasic.databinding.ActivityMainBinding
 class WebViewActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val fileChooser by lazy { FileChooser(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,11 +26,6 @@ class WebViewActivity : AppCompatActivity() {
 
         initWebView()
         initWebSetting()
-        binding.webView.setupFileChooser() //첨부파일
-    }
-
-    private fun WebView.setupFileChooser() {
-        webChromeClient = WebChromeClient(this@WebViewActivity)
     }
 
     private fun initWebView() = with(binding) {
@@ -60,16 +56,28 @@ class WebViewActivity : AppCompatActivity() {
                     }
                     printToast(errorMessage)
                     super.onReceivedError(view, request, error)
-                    errorText.visibility = View.VISIBLE //on
-//                    webView.visibility = View.VISIBLE  //off
                 }
             }
             setWebContentsDebuggingEnabled(true)    //웹에서 devtools 사용설정
             clearCache(true)
 
             loadUrl("https://www.fab365.net/")  //웹뷰에 표시할 웹사이트 주소
+
+            webChromeClient=object :WebChromeClient(){
+                override fun onShowFileChooser(
+                    webView: WebView?,
+                    filePathCallback: ValueCallback<Array<Uri>>?,
+                    fileChooserParams: FileChooserParams?
+                ): Boolean {
+                    fileChooser.show()
+                    return super.onShowFileChooser(webView, filePathCallback, fileChooserParams)
+                }
+
+
+            }
         }
     }
+
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun initWebSetting() = with(binding) {
