@@ -1,5 +1,6 @@
 package com.example.hybridbasic.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
@@ -24,8 +25,12 @@ class WebViewActivity : AppCompatActivity() {
 
         initWebView()
         initWebSetting()
+        binding.webView.setupFileChooser() //첨부파일
     }
 
+    private fun WebView.setupFileChooser() {
+        webChromeClient = WebChromeClient(this@WebViewActivity)
+    }
 
     private fun initWebView() = with(binding) {
         webView.apply {
@@ -61,6 +66,7 @@ class WebViewActivity : AppCompatActivity() {
             }
             setWebContentsDebuggingEnabled(true)    //웹에서 devtools 사용설정
             clearCache(true)
+
             loadUrl("https://www.fab365.net/")  //웹뷰에 표시할 웹사이트 주소
         }
     }
@@ -81,6 +87,7 @@ class WebViewActivity : AppCompatActivity() {
             allowUniversalAccessFromFileURLs = true
             databaseEnabled = true  //database storage API 사용 여부
             allowFileAccess = true  //파일 액세스 허용 여부
+            allowContentAccess =true    //Content URL 에 접근 사용 여부
             textZoom = 100  // system 글꼴 크기에 의해 변하는 것 방지
             builtInZoomControls = true  // 줌 아이콘
             displayZoomControls = false
@@ -96,9 +103,9 @@ class WebViewActivity : AppCompatActivity() {
 
     }
 
-
     //나중에 유틸로 분리하기
     fun printToast(msg: String) {
         Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
     }
+
 }
