@@ -1,10 +1,8 @@
 package com.example.hybridbasic.ui
 
 import android.annotation.SuppressLint
-import android.net.Uri
+import android.content.Intent
 import android.os.Bundle
-import android.webkit.ValueCallback
-import android.webkit.WebChromeClient
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
@@ -14,22 +12,32 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hybridbasic.databinding.ActivityMainBinding
+import com.example.hybridbasic.ui.helper.GalleryHelper
 
 class WebViewActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val fileChooser by lazy { FileChooser(this) }
+    private val galleryHelper by lazy { GalleryHelper(this) }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (galleryHelper.onActivityResult(requestCode, resultCode, data)) return
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+
         initWebView()
         initWebSetting()
     }
 
+
     private fun initWebView() = with(binding) {
         webView.apply {
+            webChromeClient = WebChromeClient(context,galleryHelper,this@WebViewActivity)
             webViewClient = object : WebViewClient() {  // 클릭 시 새창 안뜨게 페이지 탬색처리
                 override fun onReceivedError(   // 오류 발생 시
                     view: WebView?,
@@ -49,7 +57,7 @@ class WebViewActivity : AppCompatActivity() {
                         ERROR_REDIRECT_LOOP -> "너무 많은 리디렉션"
                         ERROR_TIMEOUT -> "연결 시간 초과"
                         ERROR_TOO_MANY_REQUESTS -> "페이지 로드중 너무 많은 요청 발생"
-                        ERROR_UNKNOWN -> "일반 오류"
+//                        ERROR_UNKNOWN -> "일반 오류"
                         ERROR_UNSUPPORTED_AUTH_SCHEME -> "지원되지 않는 인증 체계"
                         ERROR_UNSUPPORTED_SCHEME -> "URI가 지원되지 않는 방식"
                         else -> "알 수 없는 오류 발생"
@@ -63,18 +71,6 @@ class WebViewActivity : AppCompatActivity() {
 
             loadUrl("https://www.fab365.net/")  //웹뷰에 표시할 웹사이트 주소
 
-            webChromeClient=object :WebChromeClient(){
-                override fun onShowFileChooser(
-                    webView: WebView?,
-                    filePathCallback: ValueCallback<Array<Uri>>?,
-                    fileChooserParams: FileChooserParams?
-                ): Boolean {
-                    fileChooser.show()
-                    return super.onShowFileChooser(webView, filePathCallback, fileChooserParams)
-                }
-
-
-            }
         }
     }
 
@@ -90,12 +86,12 @@ class WebViewActivity : AppCompatActivity() {
             loadWithOverviewMode = true //컨텐츠가 웹뷰보다 클때 스크린 크기에 맞추기
             useWideViewPort = true  // 화면 사이즈 맞추기 허용 여부
             setSupportZoom(false)    // 화면 줌 허용 여부
-            domStorageEnabled= true     //DOM 로컬 스토리지 사용여부
+            domStorageEnabled = true     //DOM 로컬 스토리지 사용여부
 
             allowUniversalAccessFromFileURLs = true
             databaseEnabled = true  //database storage API 사용 여부
             allowFileAccess = true  //파일 액세스 허용 여부
-            allowContentAccess =true    //Content URL 에 접근 사용 여부
+            allowContentAccess = true    //Content URL 에 접근 사용 여부
             textZoom = 100  // system 글꼴 크기에 의해 변하는 것 방지
             builtInZoomControls = true  // 줌 아이콘
             displayZoomControls = false
@@ -115,5 +111,6 @@ class WebViewActivity : AppCompatActivity() {
     fun printToast(msg: String) {
         Toast.makeText(applicationContext, msg, Toast.LENGTH_LONG).show()
     }
+
 
 }

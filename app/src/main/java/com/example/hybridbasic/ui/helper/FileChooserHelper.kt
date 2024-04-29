@@ -1,9 +1,9 @@
-package com.example.hybridbasic.ui
+package com.example.hybridbasic.ui.helper
 
 import android.content.Context
 import android.content.Intent
 
-class FileChooser(private val context: Context) {
+class FileChooserHelper(private val context: Context) {
     fun show() {
         val chooserIntent = createChooserIntent()
         context.startActivity(chooserIntent)

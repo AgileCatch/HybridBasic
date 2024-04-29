@@ -10,14 +10,13 @@ import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
 import androidx.core.content.FileProvider
-import androidx.fragment.app.FragmentActivity
 import com.example.hybridbasic.util.RealPathUtils
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 
-class GalleryHelper(private val activity: FragmentActivity) {
+class GalleryHelper(private val activity: Activity) {
 
     private var mCameraPhotoPath: String? = null
     var listener: OnGalleryListener? = null
