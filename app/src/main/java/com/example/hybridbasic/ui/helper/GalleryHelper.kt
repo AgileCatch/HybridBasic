@@ -91,7 +91,7 @@ class GalleryHelper(private val activity: Activity) {
         val imageFileName = "JPEG_${timeStamp}_"
         val storageDir =
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-//        val file = File.createTempFile(imageFileName, ".jpg", storageDir)
+        val file = File.createTempFile(imageFileName, ".jpg", storageDir)
         return File("$storageDir/$imageFileName.jpg")
     }
 

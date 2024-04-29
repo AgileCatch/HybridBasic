@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Message
 import android.util.Log
 import android.webkit.JsResult
 import android.webkit.ValueCallback
@@ -27,7 +28,7 @@ class WebChromeClient(
 
     private var filePathCallback: ValueCallback<Array<Uri>>? = null
     private var legacyFilePathCallback: ValueCallback<Uri>? = null
-    private val fileChooserHelper = FileChooserHelper(context)
+//    private val fileChooserHelper = FileChooserHelper(context)
 
     init {
         galleryHelper.listener = object : GalleryHelper.OnGalleryListener {
@@ -55,13 +56,27 @@ class WebChromeClient(
         fileChooserParams: FileChooserParams?
     ): Boolean {
         Log.d(TAG, "onShowFileChooser called!!!")
+
         clearFileChooserCallback()
         this@WebChromeClient.filePathCallback = filePathCallback
-
 
         showPermission()
         return true
     }
+
+//    override fun onCreateWindow(
+//        view: WebView?,
+//        isDialog: Boolean,
+//        isUserGesture: Boolean,
+//        resultMsg: Message?
+//    ): Boolean {
+//        return webViewController.createWindow(view, resultMsg)
+//    }
+//
+//    override fun onCloseWindow(window: WebView?) {
+//        Log.d(TAG, "onCloseWindow called!!!")
+//        webViewController.closeWindow()
+//    }
 
 
     override fun onJsConfirm(
@@ -96,53 +111,22 @@ class WebChromeClient(
 
     private fun showPermission() {
         TedPermission.create()
+            //setPermissions 키워드로 권한 설정확인
             .setPermissions(*UPLOAD_PERMISSIONS)
-            .setDeniedMessage("사진과 카메라의 기능 사용을 위해서는 다음 권한에 대한 동의가 필요합니다.")
+            .setDeniedMessage("사진과 카메라의 기능이 필요한 서비스입니다.")
             .setGotoSettingButtonText("권한 설정하기")
             .setPermissionListener(object : PermissionListener {
                 override fun onPermissionGranted() {
-                    galleryHelper.startImageCapture()
+                    //이미 권한이 있거나 사용자가 권한을 허용했을 때 호출
+//                    galleryHelper.startImageCapture()
                     galleryHelper.getImage()
                 }
 
                 override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+                    //요청이 거부 되었을 때 호출
                     clearFileChooserCallback()
                 }
             }).check()
-    }
-
-    private fun checkPermission() {
-        // 권한 없을경우, 있을경우 분기처리
-        if (ContextCompat.checkSelfPermission(
-                context as WebViewActivity,
-                arrayOf(UPLOAD_PERMISSIONS).toString()
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(
-                    context,
-                    arrayOf(UPLOAD_PERMISSIONS).toString()
-                )
-            ) {
-                //권한 없을때 사용자가 권한을 거부 한 적이 있을 때 설명 필요
-                Log.d(TAG, "권한없음. 메세지 띄움")
-//                printToast("사진과 카메라의 기능 사용을 위해서는 다음 권한에 대한 동의가 필요합니다.")
-//                clearFileChooserCallback()
-//                fileChooserHelper.show()
-            } else {
-                Log.d(TAG, "권한없음. 메세지 안띄움")
-                ActivityCompat.requestPermissions(
-                    context,
-                    arrayOf(arrayOf(UPLOAD_PERMISSIONS).toString()),
-                    PERMISSION_REQUEST
-                )
-//                clearFileChooserCallback()
-            }
-        } else {
-            Log.d(TAG, "권한 있음. permission연동")
-            printToast("권한이 허용되었습니다.")
-            galleryHelper.startImageCapture()
-            galleryHelper.getImage()
-        }
     }
 
 
@@ -152,11 +136,9 @@ class WebChromeClient(
                 arrayOf(
                     Manifest.permission.READ_MEDIA_IMAGES,
                     Manifest.permission.READ_MEDIA_VIDEO,
-                    Manifest.permission.CAMERA
                 )
             } else {
                 arrayOf(
-                    Manifest.permission.CAMERA,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )

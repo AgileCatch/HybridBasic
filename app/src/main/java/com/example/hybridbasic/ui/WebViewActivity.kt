@@ -29,7 +29,6 @@ class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-
         initWebView()
         initWebSetting()
     }
