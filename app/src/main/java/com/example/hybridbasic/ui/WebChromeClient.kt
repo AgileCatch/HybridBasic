@@ -23,7 +23,6 @@ import com.gun0912.tedpermission.normal.TedPermission
 class WebChromeClient(
     private val context: Context,
     private val galleryHelper: GalleryHelper,
-    private val activity: WebViewActivity
 ) : WebChromeClient() {
 
     private var filePathCallback: ValueCallback<Array<Uri>>? = null

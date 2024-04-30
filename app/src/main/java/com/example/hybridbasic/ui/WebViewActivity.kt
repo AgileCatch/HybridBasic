@@ -36,7 +36,7 @@ class WebViewActivity : AppCompatActivity() {
 
     private fun initWebView() = with(binding) {
         webView.apply {
-            webChromeClient = WebChromeClient(context,galleryHelper,this@WebViewActivity)
+            webChromeClient = WebChromeClient(context,galleryHelper)
             webViewClient = object : WebViewClient() {  // 클릭 시 새창 안뜨게 페이지 탬색처리
                 override fun onReceivedError(   // 오류 발생 시
                     view: WebView?,
